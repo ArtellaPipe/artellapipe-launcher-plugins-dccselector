@@ -1,0 +1,7 @@
+artellapipe.launcher.plugins.dccselector.dccs.zbrushdcc module
+==============================================================
+
+.. automodule:: artellapipe.launcher.plugins.dccselector.dccs.zbrushdcc
+   :members:
+   :undoc-members:
+   :show-inheritance:

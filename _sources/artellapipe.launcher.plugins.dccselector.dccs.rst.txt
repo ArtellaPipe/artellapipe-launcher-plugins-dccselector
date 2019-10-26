@@ -1,0 +1,23 @@
+artellapipe.launcher.plugins.dccselector.dccs package
+=====================================================
+
+Submodules
+----------
+
+.. toctree::
+
+   artellapipe.launcher.plugins.dccselector.dccs.houdinidcc
+   artellapipe.launcher.plugins.dccselector.dccs.mayadcc
+   artellapipe.launcher.plugins.dccselector.dccs.nukedcc
+   artellapipe.launcher.plugins.dccselector.dccs.photoshopdcc
+   artellapipe.launcher.plugins.dccselector.dccs.substancedesignerdcc
+   artellapipe.launcher.plugins.dccselector.dccs.substancepainterdcc
+   artellapipe.launcher.plugins.dccselector.dccs.zbrushdcc
+
+Module contents
+---------------
+
+.. automodule:: artellapipe.launcher.plugins.dccselector.dccs
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+artellapipe.launcher.plugins.dccselector.dccs.nukedcc module
+============================================================
+
+.. automodule:: artellapipe.launcher.plugins.dccselector.dccs.nukedcc
+   :members:
+   :undoc-members:
+   :show-inheritance:

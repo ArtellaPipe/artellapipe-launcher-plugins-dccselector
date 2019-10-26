@@ -1,0 +1,7 @@
+artellapipe.launcher.plugins.dccselector.dccs.mayadcc module
+============================================================
+
+.. automodule:: artellapipe.launcher.plugins.dccselector.dccs.mayadcc
+   :members:
+   :undoc-members:
+   :show-inheritance:

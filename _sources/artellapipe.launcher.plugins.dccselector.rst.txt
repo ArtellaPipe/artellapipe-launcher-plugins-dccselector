@@ -1,0 +1,24 @@
+artellapipe.launcher.plugins.dccselector package
+================================================
+
+Subpackages
+-----------
+
+.. toctree::
+
+   artellapipe.launcher.plugins.dccselector.dccs
+
+Submodules
+----------
+
+.. toctree::
+
+   artellapipe.launcher.plugins.dccselector.dccselector
+
+Module contents
+---------------
+
+.. automodule:: artellapipe.launcher.plugins.dccselector
+   :members:
+   :undoc-members:
+   :show-inheritance:

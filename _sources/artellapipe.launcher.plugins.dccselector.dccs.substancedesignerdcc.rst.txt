@@ -1,0 +1,7 @@
+artellapipe.launcher.plugins.dccselector.dccs.substancedesignerdcc module
+=========================================================================
+
+.. automodule:: artellapipe.launcher.plugins.dccselector.dccs.substancedesignerdcc
+   :members:
+   :undoc-members:
+   :show-inheritance:
