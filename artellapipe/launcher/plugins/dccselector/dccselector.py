@@ -15,7 +15,6 @@ __email__ = "tpovedatd@gmail.com"
 import os
 import sys
 import time
-import json
 import random
 import logging
 import argparse
@@ -573,7 +572,7 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
                         os.environ['PYTHONPATH'] = os.environ['PYTHONPATH'] + ';' + p
 
             self.progress_bar.setValue(5)
-            self._set_text('Launching DCC: {} ...')
+            self._set_text('Launching DCC: {} ...'.format(selected_dcc))
 
         #     os.environ[self.project.get_clean_name()+'_show'] = 'show'
 
