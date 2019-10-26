@@ -13,14 +13,9 @@ __maintainer__ = "Tomas Poveda"
 __email__ = "tpovedatd@gmail.com"
 
 import os
+import sys
 import inspect
 import logging.config
-
-# =================================================================================
-
-current_project = None
-
-# =================================================================================
 
 
 def init(do_reload=False):
@@ -65,6 +60,7 @@ def init(do_reload=False):
 
     packages_order = []
 
+    update_paths()
     launcher_importer = importer.init_importer(importer_class=DCCSelectorPlugin, do_reload=False)
     launcher_importer.import_packages(order=packages_order, only_packages=False)
     if do_reload:
@@ -108,3 +104,25 @@ def get_logging_level():
         return os.environ.get('ARTELLAPIPE_LAUNCHER_PLUGINS_DCCSELECTOR_LOG_LEVEL')
 
     return os.environ.get('ARTELLAPIPE_LAUNCHER_PLUGINS_DCCSELECTOR_LOG_LEVEL', 'DEBUG')
+
+
+def update_paths():
+    """
+    Adds to sys.path necessary modules
+    :return:
+    """
+
+    dccs_path = get_dccs_path()
+    if dccs_path and os.path.isdir(dccs_path):
+        sys.path.append(dccs_path)
+
+
+def get_dccs_path():
+    """
+    Returns path where DCCs are located
+    :return: str
+    """
+
+    from tpPyUtils import path as path_utils
+
+    return path_utils.clean_path(os.path.join(os.path.dirname(__file__), 'dccs'))
