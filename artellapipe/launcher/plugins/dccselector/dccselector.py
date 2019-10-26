@@ -30,7 +30,7 @@ from tpPyUtils import path as path_utils
 from tpQtLib.core import base, qtutils
 from tpQtLib.widgets import grid
 
-
+from artellapipe.core import config
 from artellapipe.utils import exceptions, resource
 from artellapipe.launcher.core import defines, plugin
 
@@ -166,6 +166,11 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
         self._selected_dcc = None
         self._selected_version = None
 
+        self._config = config.ArtellaConfiguration(
+            project_name=project.get_clean_name(),
+            config_name='artellapipe-launcher-plugins-dccselector'
+        )
+
         super(DCCSelector, self).__init__(project=project, launcher=launcher, parent=parent)
 
     def get_main_layout(self):
@@ -233,11 +238,9 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
                     self.add_dcc_to_department(department, dcc_btn)
 
     def init_config(self):
-        mod_name = os.path.splitext(os.path.basename(os.path.abspath(__file__)))[0]
-        mod_folder = os.path.dirname(os.path.abspath(__file__))
-        plugin_config = os.path.join(mod_folder, mod_name + '.json')
-        if os.path.isfile(plugin_config):
-            self.load_dccs(plugin_config)
+
+        config_data = self._config.data
+        self.load_dccs(config_data)
 
     def get_enabled_dccs(self):
         """
@@ -266,23 +269,26 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
 
         return None
 
-    def load_dccs(self, config_file):
+    def load_dccs(self, dccs_dict):
         """
         Loads DCCs from given configuration file
         :param config_file: str
         """
 
-        with open(config_file, 'r') as f:
-            plugin_config_data = json.load(f)
-        if not plugin_config_data:
+        if not dccs_dict:
             return
 
-        dccs = plugin_config_data.get(defines.LAUNCHER_DCCS_ATTRIBUTE_NAME, dict())
-        for dcc_name, dcc_data in dccs.items():
+        for dcc_name, dcc_data in dccs_dict.items():
             dcc_icon = dcc_data.get(defines.LAUNCHER_DCC_ICON_ATTRIBUTE_NAME, None)
-            dcc_enabled = bool(util.strtobool(dcc_data.get(defines.LAUNCHER_DCC_ENABLED_ATTRIBUTE_NAME, False)))
+            dcc_enabled = dcc_data.get(defines.LAUNCHER_DCC_ENABLED_ATTRIBUTE_NAME, False)
+            if type(dcc_enabled) in [str, unicode]:
+                dcc_enabled = bool(util.strtobool(dcc_enabled))
             default_version = dcc_data.get(defines.LAUNCHER_DCC_DEFAULT_VERSION_ATTRIBUTE_NAME, None)
+            if default_version:
+                default_version = str(default_version)
             supported_versions = dcc_data.get(defines.LAUNCHER_DCC_SUPPORTED_VERSIONS_ATTRIBUTE_NAME, list())
+            if supported_versions:
+                supported_versions = [str(v) for v in supported_versions]
             departments = dcc_data.get(defines.LAUNCHER_DCC_DEPARTMENTS_ATTRIBUTE_NAME, list())
             plugins = dcc_data.get(defines.LAUNCHER_DCC_PLUGINS_ATTRIBUTE_NAME, list())
             self._dccs[dcc_name] = DccData(
@@ -307,7 +313,7 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
 
             try:
                 dcc_module = importlib.import_module(
-                    'artellapipe.launcher.dccs.{}dcc'.format(dcc_name.lower().replace(' ', '')))
+                    'artellapipe.launcher.plugins.dccselector.dccs.{}dcc'.format(dcc_name.lower().replace(' ', '')))
             except ImportError:
                 LOGGER.warning('DCC Python module {}dcc not found!'.format(dcc_name.lower().replace(' ', '')))
                 continue
@@ -567,17 +573,17 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
                         os.environ['PYTHONPATH'] = os.environ['PYTHONPATH'] + ';' + p
 
             self.progress_bar.setValue(5)
-            self._set_text('Checking {} tools version ...'.format(self.project.name.title()))
+            self._set_text('Launching DCC: {} ...')
 
         #     os.environ[self.project.get_clean_name()+'_show'] = 'show'
 
             time.sleep(1)
 
-            # We need to import this here because this path maybe is not available until we update Artella paths
-            try:
-                import spigot
-            except ImportError:
-                LOGGER.error('Impossible to import Artella Python modules! Maybe Artella is not installed properly.')
+            # # We need to import this here because this path maybe is not available until we update Artella paths
+            # try:
+            #     import spigot
+            # except ImportError:
+            #     LOGGER.error('Impossible to import Artella Python modules! Maybe Artella is not installed properly.')
 
             launch_fn = self._dccs[selected_dcc].launch_fn
             if not launch_fn:
