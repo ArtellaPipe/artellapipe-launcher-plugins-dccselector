@@ -167,7 +167,8 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
 
         self._config = config.ArtellaConfiguration(
             project_name=project.get_clean_name(),
-            config_name='artellapipe-launcher-plugins-dccselector'
+            config_name='artellapipe-launcher-plugins-dccselector',
+            environment=project.get_environment()
         )
 
         super(DCCSelector, self).__init__(project=project, launcher=launcher, parent=parent)
@@ -383,12 +384,7 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
         self.main_layout.setAlignment(Qt.AlignBottom)
 
         self._splash.setLayout(self.main_layout)
-        progress_colors = (self.project.progress_bar_color0, self.project.progress_bar_color1)
-        self.progress_bar = QProgressBar()
-        self.progress_bar.setStyleSheet(
-            "QProgressBar {border: 0px solid grey; border-radius:4px; padding:0px} "
-            "QProgressBar::chunk {background: qlineargradient(x1: 0, y1: 1, x2: 1, y2: 1, stop: 0 rgb(" + str(
-                progress_colors[0]) + "), stop: 1 rgb(" + str(progress_colors[1]) + ")); }")
+        self.progress_bar = self.project.get_progress_bar()
         self.main_layout.addWidget(self.progress_bar)
         self.progress_bar.setMaximum(6)
         self.progress_bar.setTextVisible(False)
