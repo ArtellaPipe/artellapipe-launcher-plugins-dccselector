@@ -89,21 +89,19 @@ def launch(exec_, setup_path):
     if not exec_:
         return None
 
-    setup_root = os.path.dirname(setup_path)
-
-    hou_dcc_path = os.path.join(setup_root, 'dcc', 'houdini')
-    if not os.path.isdir(hou_dcc_path):
+    script_file = os.path.join(setup_path, 'userSetup.py')
+    if not os.path.isfile(script_file):
         qtutils.show_warning(
-            None, 'No valid Houdini DCC folder found!',
-            'Launcher cannot launch Houdini. Houdini DCC folder not found: {}!'.format(hou_dcc_path))
+            None, 'No valid Houdini DCC Initialization Script found!',
+            'Launcher cannot launch Houdini. Houdini DCC Initialization script not found: {}!'.format(script_file))
         return None
-    hou_bootstrap = os.path.join(hou_dcc_path, 'houdini_bootstrap.bat')
-    if not os.path.isfile(hou_bootstrap):
-        qtutils.show_warning(
-            None, 'No valid Houdini Bootstrap found!',
-            'Launcher cannot launch Houdini. Bootstrap not found: {}!'.format(hou_bootstrap))
-        return None
-    cmd = [hou_bootstrap]
-    cmd.extend([exec_, hou_dcc_path, setup_path])
 
-    subprocess.Popen(cmd)
+    curr_env = dict()
+    for k, v in os.environ.items():
+        curr_env[k] = str(v)
+
+    curr_env['HOUDINI_PATH'] = '{};&'.format(setup_path)
+
+    hou_cmd = '"{}" waitforui "{}"'.format(exec_, script_file)
+
+    subprocess.Popen(hou_cmd, close_fds=True, env=curr_env)
