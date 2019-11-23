@@ -600,5 +600,5 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
 
         launch_fn(exec_=exec_, setup_path=bootstrap_path)
 
-        self.launcher.close()
-        QApplication.instance().quit()
+        # self.launcher.close()
+        # QApplication.instance().quit()
