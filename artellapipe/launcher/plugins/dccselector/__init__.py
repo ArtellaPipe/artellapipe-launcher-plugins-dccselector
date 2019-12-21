@@ -18,7 +18,7 @@ import inspect
 import logging.config
 
 
-def init(do_reload=False):
+def init(do_reload=False, dev=False):
     """
     Initializes module
     :param do_reload: bool, Whether to reload modules or not
@@ -26,17 +26,18 @@ def init(do_reload=False):
 
     logging.config.fileConfig(get_logging_config(), disable_existing_loggers=False)
 
-    import sentry_sdk
-    try:
-        sentry_sdk.init("https://ce5e3ff0ce7744b38ba65ff9067d658b@sentry.io/1796914")
-    except RuntimeError:
-        sentry_sdk.init("https://ce5e3ff0ce7744b38ba65ff9067d658b@sentry.io/1796914", default_integrations=False)
+    if not dev:
+        import sentry_sdk
+        try:
+            sentry_sdk.init("https://ce5e3ff0ce7744b38ba65ff9067d658b@sentry.io/1796914")
+        except RuntimeError:
+            sentry_sdk.init("https://ce5e3ff0ce7744b38ba65ff9067d658b@sentry.io/1796914", default_integrations=False)
 
     from tpPyUtils import importer
 
     class DCCSelectorPlugin(importer.Importer, object):
-        def __init__(self):
-            super(DCCSelectorPlugin, self).__init__(module_name='artellapipe.launcher.plugins.dccselector')
+        def __init__(self, debug=False):
+            super(DCCSelectorPlugin, self).__init__(module_name='artellapipe.launcher.plugins.dccselector', debug=debug)
 
         def get_module_path(self):
             """
@@ -61,7 +62,7 @@ def init(do_reload=False):
     packages_order = []
 
     update_paths()
-    launcher_importer = importer.init_importer(importer_class=DCCSelectorPlugin, do_reload=False)
+    launcher_importer = importer.init_importer(importer_class=DCCSelectorPlugin, do_reload=False, debug=dev)
     launcher_importer.import_packages(order=packages_order, only_packages=False)
     if do_reload:
         launcher_importer.reload_all()
