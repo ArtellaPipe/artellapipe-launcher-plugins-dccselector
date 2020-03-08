@@ -24,13 +24,13 @@ from distutils import util
 from Qt.QtCore import *
 from Qt.QtWidgets import *
 
-from tpPyUtils import path as path_utils
+from tpDcc.libs.python import path as path_utils
 
-from tpQtLib.core import base, qtutils
-from tpQtLib.widgets import grid
+import tpDcc
+from tpDcc.libs.qt.core import base, qtutils
+from tpDcc.libs.qt.widgets import grid
 
-from artellapipe.core import config
-from artellapipe.utils import exceptions, resource
+from artellapipe.utils import exceptions
 from artellapipe.launcher.core import defines, plugin
 
 LOGGER = logging.getLogger()
@@ -100,15 +100,15 @@ class DCCButton(base.BaseWidget, object):
             theme = 'color'
             icon_name = dcc_name
 
-        icon_path = resource.ResourceManager().get('icons', theme, '{}.png'.format(icon_name))
+        icon_path = tpDcc.ResourcesMgr().get('icons', theme, '{}.png'.format(icon_name))
         if not os.path.isfile(icon_path):
-            icon_path = resource.ResourceManager().get('icons', theme, '{}.png'.format(icon_name))
+            icon_path = tpDcc.ResourcesMgr().get('icons', theme, '{}.png'.format(icon_name))
             if not os.path.isfile(icon_path):
-                dcc_icon = resource.ResourceManager().icon('artella')
+                dcc_icon = tpDcc.ResourcesMgr().icon('artella')
             else:
-                dcc_icon = resource.ResourceManager().icon(icon_name, theme=theme)
+                dcc_icon = tpDcc.ResourcesMgr().icon(icon_name, theme=theme)
         else:
-            dcc_icon = resource.ResourceManager().icon(icon_name, theme=theme)
+            dcc_icon = tpDcc.ResourcesMgr().icon(icon_name, theme=theme)
 
         self._title = QPushButton(self._dcc.name.title())
         self._title.setStyleSheet(
@@ -165,9 +165,10 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
         self._selected_dcc = None
         self._selected_version = None
 
-        self._config = config.ArtellaConfiguration(
-            project_name=project.get_clean_name(),
+        self._config = tpDcc.ConfigsMgr().get_config(
             config_name='artellapipe-launcher-plugins-dccselector',
+            package_name=project.get_clean_name(),
+            root_package_name='artellapipe',
             environment=project.get_environment()
         )
 
@@ -262,6 +263,7 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
             department_widget.setEditTriggers(QAbstractItemView.NoEditTriggers)
             department_widget.setFocusPolicy(Qt.NoFocus)
             department_widget.setSelectionMode(QAbstractItemView.NoSelection)
+            department_widget.setStyleSheet('QTableWidget::item:hover{background-color: transparent;}')
 
             self._departments[department_name] = department_widget
             self._departments_tab.addTab(department_widget, department_name.title())
@@ -351,17 +353,17 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
         :return: Pixmap
         """
 
-        splash_path = resource.ResourceManager().get('images', 'splash.png', key='project')
+        splash_path = tpDcc.ResourcesMgr().get('images', 'splash.png', key='project')
         splash_dir = os.path.dirname(splash_path)
         splash_files = [f for f in os.listdir(splash_dir) if
                         f.startswith('splash') and os.path.isfile(os.path.join(splash_dir, f))]
         if splash_files or not os.path.isfile(splash_path):
             splash_index = random.randint(0, len(splash_files) - 1)
             splash_name, splash_extension = os.path.splitext(splash_files[splash_index])
-            splash_pixmap = resource.ResourceManager().pixmap(
+            splash_pixmap = tpDcc.ResourcesMgr().pixmap(
                 splash_name, extension=splash_extension[1:], key='project')
         else:
-            splash_pixmap = resource.ResourceManager().pixmap('splash')
+            splash_pixmap = tpDcc.ResourcesMgr().pixmap('splash')
 
         return splash_pixmap.scaled(QSize(800, 270))
 
@@ -399,14 +401,14 @@ class DCCSelector(plugin.ArtellaLauncherPlugin, object):
 
         self.main_layout.addItem(QSpacerItem(0, 20))
 
-        artella_icon = resource.ResourceManager().icon('artella')
+        artella_icon = tpDcc.ResourcesMgr().icon('artella')
         artella_lbl = QLabel()
         artella_lbl.setFixedSize(QSize(52, 52))
         artella_lbl.setParent(self._splash)
         artella_lbl.move(self._splash.width() - artella_lbl.width(), 0)
         artella_lbl.setPixmap(artella_icon.pixmap(artella_icon.actualSize(QSize(48, 48))))
 
-        dcc_icon = resource.ResourceManager().icon(dcc_name.lower())
+        dcc_icon = tpDcc.ResourcesMgr().icon(dcc_name.lower())
         dcc_lbl = QLabel()
         dcc_lbl.setFixedSize(QSize(52, 52))
         dcc_lbl.setParent(self._splash)
