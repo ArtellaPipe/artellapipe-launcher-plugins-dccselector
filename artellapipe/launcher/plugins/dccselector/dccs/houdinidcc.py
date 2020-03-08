@@ -17,7 +17,7 @@ import platform
 import subprocess
 import logging
 
-from tpQtLib.core import qtutils
+from tpDcc.libs.qt.core import qtutils
 
 LOGGER = logging.getLogger()
 
