@@ -14,6 +14,8 @@ Submodules
 .. toctree::
 
    artellapipe.launcher.plugins.dccselector.dccselector
+   artellapipe.launcher.plugins.dccselector.loader
+   artellapipe.launcher.plugins.dccselector.register
 
 Module contents
 ---------------

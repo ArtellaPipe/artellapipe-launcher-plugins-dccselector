@@ -1,0 +1,7 @@
+artellapipe.launcher.plugins.dccselector.register module
+========================================================
+
+.. automodule:: artellapipe.launcher.plugins.dccselector.register
+   :members:
+   :undoc-members:
+   :show-inheritance:
