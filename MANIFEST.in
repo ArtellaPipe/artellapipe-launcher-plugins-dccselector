@@ -1,2 +1,4 @@
 include artellapipe/launcher/plugins/dccselector/__logging__.ini
 recursive-include artellapipe/launcher/plugins/dccselector/resources/* *.*
+include versioneer.py
+include artellapipe/launcher/plugins/dccselector/_version.py
