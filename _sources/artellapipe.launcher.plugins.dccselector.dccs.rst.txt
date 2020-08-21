@@ -5,6 +5,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 4
 
    artellapipe.launcher.plugins.dccselector.dccs.houdinidcc
    artellapipe.launcher.plugins.dccselector.dccs.mayadcc
