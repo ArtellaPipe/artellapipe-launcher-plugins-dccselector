@@ -33,7 +33,7 @@ from tpDcc.libs.qt.widgets import grid
 from artellapipe.utils import exceptions
 from artellapipe.launcher.core import defines, plugin
 
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger('artellapipe-launcher-plugins-dccselector')
 
 
 class DccData(object):
@@ -136,6 +136,8 @@ class DCCButton(base.BaseWidget, object):
         index = self._version_combo.findText(default_version, Qt.MatchFixedString)
         if index > -1:
             self._version_combo.setCurrentIndex(index)
+
+        self.setMaximumWidth(105)
 
     def setup_signals(self):
         self._dcc_btn.clicked.connect(self._on_button_clicked)
