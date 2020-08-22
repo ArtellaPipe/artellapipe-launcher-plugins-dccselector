@@ -19,7 +19,7 @@ import logging
 
 from tpDcc.libs.qt.core import qtutils
 
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger('artellapipe-launcher-plugins-dccselector')
 
 
 DEFAULT_DCC = 'houdini.exe'

@@ -17,7 +17,7 @@ import platform
 import subprocess
 import logging
 
-LOGGER = logging.getLogger()
+LOGGER = logging.getLogger('artellapipe-launcher-plugins-dccselector')
 
 
 DEFAULT_DCC = 'maya.exe'
